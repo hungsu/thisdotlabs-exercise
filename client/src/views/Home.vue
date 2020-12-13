@@ -4,6 +4,8 @@
       <input type="search" v-model="query">
     </form>
     <Results :results="results" />
+
+    <p v-if="query.length > 0 && querySubmitted">{{ resultCount }} results found.</p>
   </div>
 </template>
 
@@ -15,8 +17,10 @@ import Axios from "axios"
 @Component({
   data: function () {
     return {
-      query: '',
-      results: []
+      query: '', // Up to 256 characters https://docs.github.com/en/free-pro-team@latest/rest/reference/search#limitations-on-query-length
+      querySubmitted: false,
+      results: [],
+      resultCount: 0
     }
   },
   components: {
@@ -28,7 +32,14 @@ import Axios from "axios"
       const config = {}
       Axios.get(url,config).then(response => {
         this.results = response.data.items
+        this.resultCount = 0 + response.data.total_count
+        this.querySubmitted = true
       })
+    }
+  },
+  watch: {
+    query: () => {
+      this.querySubmitted = false
     }
   }
 })
