@@ -5,7 +5,7 @@
     </form>
     <Results :results="results" />
 
-    <p v-if="query.length > 0 && querySubmitted">{{ resultCount }} results found.</p>
+    <p v-if="previousQuery.length > 0">{{ resultsCountString }}</p>
   </div>
 </template>
 
@@ -17,8 +17,8 @@ import Axios from "axios"
 @Component({
   data: function () {
     return {
+      previousQuery: '',
       query: '', // Up to 256 characters https://docs.github.com/en/free-pro-team@latest/rest/reference/search#limitations-on-query-length
-      querySubmitted: false,
       results: [],
       resultCount: 0
     }
@@ -26,20 +26,21 @@ import Axios from "axios"
   components: {
     Results
   },
+  computed: {
+    resultsCountString: function() {
+      const noun = this.resultCount > 1 ? 'results' : 'result'
+      return `${this.resultCount} ${noun} found.`
+    }
+  },
   methods: {
     onSubmit: function() {
-      const url = 'https://api.github.com/search/users?q=' + this.query
+      const url = 'https://api.github.com/search/users?type=user&q=' + this.query
       const config = {}
       Axios.get(url,config).then(response => {
         this.results = response.data.items
         this.resultCount = 0 + response.data.total_count
-        this.querySubmitted = true
+        this.previousQuery = this.query
       })
-    }
-  },
-  watch: {
-    query: () => {
-      this.querySubmitted = false
     }
   }
 })
