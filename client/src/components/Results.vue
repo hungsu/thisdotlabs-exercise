@@ -2,7 +2,7 @@
   <div class="results-container">
     <ul class="results">
       <li v-for="result in results" v-bind:key="result.id">
-        <a :href="result.html_url">
+        <a :href="result.html_url" target="_blank">
             <img :src="result.avatar_url" /> {{result.login}}
         </a>
       </li>
