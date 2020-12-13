@@ -1,17 +1,32 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+    <form v-on:submit.prevent="onSubmit">
+      <input type="search" v-model="query">
+    </form>
+    <Results />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import HelloWorld from "@/components/HelloWorld.vue"; // @ is an alias to /src
+import Results from "@/components/Results.vue";
+import Axios from "axios"
 
 @Component({
+  data: function () {
+    return {
+      query: ''
+    }
+  },
   components: {
-    HelloWorld
+    Results
+  },
+  methods: {
+    onSubmit: function() {
+      const url = 'https://api.github.com/search/users?q=' + this.query
+      const config = {}
+      Axios.get(url,config)
+    }
   }
 })
 export default class Home extends Vue {}
