@@ -2,8 +2,9 @@
   <div class="results-container">
     <ul class="results">
       <li v-for="result in results" v-bind:key="result.id">
-        {{ result }}
-        <img :src="result.avatar_url" />
+        <a :href="result.html_url">
+            <img :src="result.avatar_url" /> {{result.login}}
+        </a>
       </li>
     </ul>
   </div>
