@@ -3,7 +3,7 @@
     <form v-on:submit.prevent="onSubmit">
       <input type="search" v-model="query">
     </form>
-    <Results />
+    <Results :results="results" />
   </div>
 </template>
 
@@ -15,7 +15,8 @@ import Axios from "axios"
 @Component({
   data: function () {
     return {
-      query: ''
+      query: '',
+      results: []
     }
   },
   components: {
@@ -25,7 +26,9 @@ import Axios from "axios"
     onSubmit: function() {
       const url = 'https://api.github.com/search/users?q=' + this.query
       const config = {}
-      Axios.get(url,config)
+      Axios.get(url,config).then(response => {
+        this.results = response.data.items
+      })
     }
   }
 })
