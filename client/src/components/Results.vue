@@ -19,7 +19,7 @@ interface GithubResult {
 
 @Component
 export default class Results extends Vue {
-  @Prop() results: GithubResult[] = []
+  @Prop() results: GithubResult[] = [];
 }
 </script>
 
