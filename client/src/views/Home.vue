@@ -76,6 +76,7 @@ export default class Home extends Vue {
 
     const config:AxiosRequestConfig = {
       headers: {
+        // This token has no permissions and is only good for increasing API limits from 10 to 30 per minute
         authorization: 'token 0e85c458816135eb8497c79f0e1d4ef967a9eef9'
       }
     };
