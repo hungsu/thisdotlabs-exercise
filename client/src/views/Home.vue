@@ -8,7 +8,7 @@
         v-model="query"
         placeholder="example: arthyn"
       />
-      <input type="submit" value="🔍" />
+      <input type="submit" value="🔍" aria-label="Search" />
     </form>
     <Results :results="results" />
     <div v-if="pageTotal">
