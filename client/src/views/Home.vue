@@ -44,6 +44,7 @@ export default class Home extends Vue {
 
   @Watch('$route', { immediate: true, deep: true })
   onUrlChange(newVal: any) {
+    this.pageNumber = parseInt(newVal.query.page,10)
     this.getResults(this.query);
   }
 
