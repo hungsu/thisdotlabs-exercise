@@ -21,7 +21,6 @@
 </template>
 
 <script lang="ts">
-import router from "../router";
 import { Component, Vue, Watch } from "vue-property-decorator";
 import Results from "@/components/Results.vue";
 import Axios, { AxiosBasicCredentials, AxiosRequestConfig } from "axios";
@@ -45,7 +44,7 @@ export default class Home extends Vue {
   @Watch('$route', { immediate: true, deep: true })
   onUrlChange(newVal: any) {
     this.pageNumber = parseInt(newVal.query.page,10)
-    this.getResults(this.query);
+    if (newVal.query.q.length > 0) this.getResults(newVal.query.q);
   }
 
   get pageTotal() {
@@ -55,17 +54,20 @@ export default class Home extends Vue {
     const noun = this.resultCount > 1 ? "results" : "result";
     return `${this.resultCount} ${noun} found.`;
   }
+  get AxiosQuery() {
+    return {type: 'user', page: this.pageNumber.toString(), q: this.query}
+  }
   onSubmit() {
     this.pageNumber = 1;
-    this.$router.push({name: 'Home', query: {type: 'user', page: this.pageNumber.toString(), q: this.query}})
+    this.$router.push({name: 'Home', query: this.AxiosQuery})
   }
   getNext() {
     this.pageNumber++;
-    this.$router.push({name: 'Home', query: {type: 'user', page: this.pageNumber.toString(), q: this.query}})
+    this.$router.push({name: 'Home', query: this.AxiosQuery})
   }
   getPrevious() {
     this.pageNumber--;
-    this.$router.push({name: 'Home', query: {type: 'user', page: this.pageNumber.toString(), q: this.query}})
+    this.$router.push({name: 'Home', query: this.AxiosQuery})
   }
   getResults(query: string) {
     const path = this.$route.fullPath.substring(1)
