@@ -55,11 +55,12 @@ export default class Home extends Vue {
     return `${this.resultCount} ${noun} found.`;
   }
   get AxiosQuery() {
-    return {type: 'user', page: this.pageNumber.toString(), q: this.query}
+    return {type: 'user', page: this.pageNumber.toString(), q: this.$route.query.q}
   }
   onSubmit() {
     this.pageNumber = 1;
-    this.$router.push({name: 'Home', query: this.AxiosQuery})
+    const query = {...this.AxiosQuery, q: this.query}
+    this.$router.push({name: 'Home', query})
   }
   getNext() {
     this.pageNumber++;
