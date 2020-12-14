@@ -11,17 +11,16 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 
-@Component({
-  props: {
-    results: {
-      required: true,
-      type: Array
-    }
-  }
-})
-export default class Results extends Vue {}
+interface GithubResult {
+  id?: string;
+}
+
+@Component
+export default class Results extends Vue {
+  @Prop() results: GithubResult[] = []
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
