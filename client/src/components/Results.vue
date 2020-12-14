@@ -3,7 +3,7 @@
     <ul class="results">
       <li v-for="result in results" v-bind:key="result.id">
         <a :href="result.html_url" target="_blank">
-            <img :src="result.avatar_url" /> {{result.login}}
+          <img :src="result.avatar_url" /> {{ result.login }}
         </a>
       </li>
     </ul>
@@ -11,15 +11,15 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 
 @Component({
-    props: {
-        results: {
-            required: true,
-            type: Array
-        },
+  props: {
+    results: {
+      required: true,
+      type: Array
     }
+  }
 })
 export default class Results extends Vue {}
 </script>
@@ -41,7 +41,7 @@ a {
   color: #42b983;
 }
 img {
-    height: 128px;
-    width: 128px;
+  height: 128px;
+  width: 128px;
 }
 </style>
