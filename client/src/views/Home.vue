@@ -24,7 +24,7 @@
 import router from "../router";
 import { Component, Vue, Watch } from "vue-property-decorator";
 import Results from "@/components/Results.vue";
-import Axios from "axios";
+import Axios, { AxiosBasicCredentials, AxiosRequestConfig } from "axios";
 
 interface GithubResult {
   id?: string;
@@ -57,21 +57,25 @@ export default class Home extends Vue {
   }
   onSubmit() {
     this.pageNumber = 1;
-    this.$router.push({name: 'Home', query: {type: 'user', page: this.pageNumber, q: this.query}})
+    this.$router.push({name: 'Home', query: {type: 'user', page: this.pageNumber.toString(), q: this.query}})
   }
   getNext() {
     this.pageNumber++;
-    this.$router.push({name: 'Home', query: {type: 'user', page: this.pageNumber, q: this.query}})
+    this.$router.push({name: 'Home', query: {type: 'user', page: this.pageNumber.toString(), q: this.query}})
   }
   getPrevious() {
     this.pageNumber--;
-    this.$router.push({name: 'Home', query: {type: 'user', page: this.pageNumber, q: this.query}})
+    this.$router.push({name: 'Home', query: {type: 'user', page: this.pageNumber.toString(), q: this.query}})
   }
   getResults(query: string) {
     const path = this.$route.fullPath.substring(1)
     const url = `https://api.github.com/search/users${path}`;
 
-    const config = {};
+    const config:AxiosRequestConfig = {
+      headers: {
+        authorization: 'token 0e85c458816135eb8497c79f0e1d4ef967a9eef9'
+      }
+    };
     Axios.get(url, config).then(response => {
       this.results = response.data.items || [];
       this.resultCount = 0 + response.data.total_count;
