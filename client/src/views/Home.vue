@@ -21,7 +21,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import router from "../router";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import Results from "@/components/Results.vue";
 import Axios from "axios";
 
@@ -41,6 +42,11 @@ export default class Home extends Vue {
   results: GithubResult[] = [];
   resultCount = 0;
 
+  @Watch('$route', { immediate: true, deep: true })
+  onUrlChange(newVal: any) {
+    this.getResults(this.query);
+  }
+
   get pageTotal() {
     return Math.ceil(this.resultCount / 30);
   }
@@ -50,22 +56,23 @@ export default class Home extends Vue {
   }
   onSubmit() {
     this.pageNumber = 1;
-    this.getResults(this.query);
+    this.$router.push({name: 'Home', query: {type: 'user', page: this.pageNumber, q: this.query}})
   }
   getNext() {
     this.pageNumber++;
-    this.getResults(this.query);
+    this.$router.push({name: 'Home', query: {type: 'user', page: this.pageNumber, q: this.query}})
   }
   getPrevious() {
     this.pageNumber--;
-    this.getResults(this.query);
+    this.$router.push({name: 'Home', query: {type: 'user', page: this.pageNumber, q: this.query}})
   }
   getResults(query: string) {
-    const url = `https://api.github.com/search/users?type=user&page=${this.pageNumber}&q=${query}`;
+    const path = this.$route.fullPath.substring(1)
+    const url = `https://api.github.com/search/users${path}`;
 
     const config = {};
     Axios.get(url, config).then(response => {
-      this.results = response.data.items;
+      this.results = response.data.items || [];
       this.resultCount = 0 + response.data.total_count;
       this.previousQuery = query;
     });
